@@ -1,70 +1,91 @@
-# AI Voice Detector
+# 🛡️ Voice Guard — Human vs AI Speech Detector
 
-AI Voice Detector is a hackathon-style machine learning project that detects whether a short speech clip is **human-recorded** or **AI-generated**. The system takes an uploaded or microphone-recorded audio clip, converts it into a log-mel spectrogram, runs it through a lightweight convolutional neural network, and returns:
+<p align="center">
+  <b>Explainable AI voice detection for short speech clips</b><br>
+  Classifies audio as <b>Human</b> or <b>AI-generated</b> using log-mel spectrograms, a PyTorch CNN, Grad-CAM explainability, and a Gradio web demo.
+</p>
 
-- Probability that the clip is human speech
-- Probability that the clip is AI-generated speech
-- Final predicted label
-- Grad-CAM spectrogram heatmap showing which time-frequency regions influenced the model
-
-The project also includes scripts for generating AI speech clips with ElevenLabs, converting MP3 files to 16 kHz WAV format, training a PyTorch CNN classifier, and running an interactive Gradio web demo.
-
-Try the deployed app here: [Voice Guard on Hugging Face Spaces](https://huggingface.co/spaces/varunkul/Voice-guard)
-
----
-## Team
-
-- [Akhilesh Kumbhar](https://github.com/akhileshkumbhar05-ui)
-- [Varun Kulkarni](https://github.com/varun-kul)
-- [Hritik Patil](https://github.com/Hritik827)
-
----
-## Project Goal
-
-The goal of this project is to build a lightweight, explainable AI voice detection system that can classify short audio clips as either:
-
-- `human`
-- `ai`
-
-The project is designed as a practical prototype for detecting synthetic speech in real time or near real time. It focuses on a complete end-to-end workflow:
-
-1. Collect or generate audio data
-2. Normalize all clips to a consistent audio format
-3. Convert audio into log-mel spectrogram features
-4. Train a compact CNN classifier
-5. Run inference through a web UI
-6. Explain model decisions using Grad-CAM heatmaps
+<p align="center">
+  <a href="https://huggingface.co/spaces/varunkul/Voice-guard">
+    <img src="https://img.shields.io/badge/Live%20Demo-Hugging%20Face-yellow?style=for-the-badge&logo=huggingface" alt="Live Demo">
+  </a>
+  <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-CNN-red?style=for-the-badge&logo=pytorch" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Gradio-Web%20App-orange?style=for-the-badge" alt="Gradio">
+  <img src="https://img.shields.io/badge/Docker-Supported-2496ED?style=for-the-badge&logo=docker" alt="Docker">
+</p>
 
 ---
 
-## Current Status
+## 🚀 Live Demo
 
-This repository contains a working prototype with:
+Try the deployed app here:
 
-- A trained PyTorch model checkpoint
-- A Gradio-based web interface
-- Audio preprocessing utilities
-- A custom CNN model
-- A training pipeline
-- Grad-CAM explainability
-- ElevenLabs-based AI speech generation scripts
-- A small local dataset of AI and human speech samples
-- Docker support for running the app
-
-This is not a production-grade detector yet. It is a hackathon/prototype system trained on a limited dataset, so predictions should be treated as experimental.
+🔗 **[Voice Guard on Hugging Face Spaces](https://huggingface.co/spaces/varunkul/Voice-guard)**
 
 ---
 
-## Main Features
+## 📌 Project Overview
 
-### 1. Human vs AI Speech Classification
+**Voice Guard** is a hackathon-style machine learning project that detects whether a short speech clip is **human-recorded** or **AI-generated**.
 
-The detector accepts a short audio clip and returns class probabilities:
+The system takes an uploaded or microphone-recorded audio clip, converts it into a **log-mel spectrogram**, runs it through a lightweight **Convolutional Neural Network**, and returns:
+
+- Probability that the audio is **human speech**
+- Probability that the audio is **AI-generated speech**
+- Final predicted label: `human` or `ai`
+- Grad-CAM spectrogram heatmap showing the audio regions that influenced the model
+
+This project is built as a practical prototype for synthetic speech detection and explainable audio classification.
+
+---
+
+## 👥 Team
+
+| Name | GitHub |
+|---|---|
+| Hritik Patil | [@Hritik827](https://github.com/Hritik827) |
+| Akhilesh Kumbhar | [@akhileshkumbhar05-ui](https://github.com/akhileshkumbhar05-ui) |
+| Varun Kulkarni | [@varun-kul](https://github.com/varun-kul) |
+
+---
+
+## 🎯 Project Goal
+
+The goal of this project is to build a lightweight and explainable AI voice detection system that can classify short audio clips into two categories:
+
+```text
+0 = human
+1 = ai
+```
+
+The project follows a complete end-to-end machine learning workflow:
+
+```mermaid
+flowchart LR
+    A[Audio Input] --> B[Audio Normalization]
+    B --> C[Log-Mel Spectrogram]
+    C --> D[TinyMelCNN Model]
+    D --> E[Human / AI Prediction]
+    D --> F[Grad-CAM Heatmap]
+    E --> G[Gradio Web App]
+    F --> G
+```
+
+---
+
+## ✨ Key Features
+
+### 🎙️ 1. Human vs AI Speech Classification
+
+The detector accepts a short audio clip and predicts whether the clip is human-recorded or AI-generated.
+
+Example output:
 
 ```json
 {
-  "human": 0.23,
-  "ai": 0.77,
+  "human": 0.184,
+  "ai": 0.816,
   "label": "ai",
   "threshold": 0.5,
   "trained": true
@@ -75,63 +96,58 @@ The model predicts `ai` when the AI probability is greater than or equal to the 
 
 ---
 
-### 2. Gradio Web Interface
+### 🌐 2. Gradio Web Interface
 
-The app provides a simple browser-based UI where users can:
+The project includes a browser-based Gradio app where users can:
 
-- Record audio from a microphone
 - Upload an audio file
+- Record audio using a microphone
 - Click **Analyze**
-- View model probabilities
-- View an explanation heatmap
-- Optionally run a provenance check
+- View prediction probabilities
+- View the final label
+- View a Grad-CAM explanation heatmap
+- Run an optional provenance check button
 
-The active app entry point is:
+Main app entry point:
 
 ```bash
 python app/app.py
 ```
 
-The Gradio interface launches from `app/app.py`.
-
 ---
 
-### 3. Explainable Heatmap with Grad-CAM
+### 🔥 3. Grad-CAM Explainability
 
-The model includes a Grad-CAM utility for spectrogram-based explanations.
+Instead of returning only a black-box prediction, the model generates a Grad-CAM heatmap over the spectrogram.
 
-The Grad-CAM output highlights the regions of the mel spectrogram that influenced the model decision most strongly.
+The heatmap highlights the time-frequency regions that contributed most strongly to the model prediction.
 
-This helps make the system more interpretable than a plain binary classifier.
-
-The explanation logic is implemented in:
+Implemented in:
 
 ```text
 app/utils/gradcam.py
 ```
 
-The detector calls Grad-CAM from:
+Called from:
 
 ```text
 app/inference.py
 ```
 
-The Gradio app displays the heatmap as an image using a `magma` colormap from Matplotlib.
-
 ---
 
-### 4. ElevenLabs AI Speech Generation
+### 🤖 4. ElevenLabs AI Speech Generation
 
-The repository includes a generation pipeline for creating AI voice clips using ElevenLabs text-to-speech.
+The repository includes a script to generate AI speech clips using the ElevenLabs text-to-speech API.
 
-The generation code is in:
+Generation files:
 
 ```text
 gen_clips.py
 app/elevenlabs_tools.py
 ```
 
-The generation script uses 10 different ElevenLabs voices:
+The generation script uses multiple ElevenLabs voices, including:
 
 - Adam
 - Alice
@@ -144,26 +160,13 @@ The generation script uses 10 different ElevenLabs voices:
 - Freya
 - Gigi
 
-The dataset generation script contains 200 scripted sentences total, with 20 sentences per voice. The prompts cover varied speaking styles such as:
-
-- News anchor
-- Friendly conversation
-- British formal speech
-- Energetic young speaker
-- Calm meditation
-- Elderly storyteller
-- Technical presenter
-- Audiobook narration
-- Sports commentator
-- Curious childlike questions
-
 Generated MP3 files are saved to:
 
 ```text
 data/raw/ai_mp3/
 ```
 
-They are then converted to 16 kHz mono WAV files and saved to:
+Converted 16 kHz mono WAV files are saved to:
 
 ```text
 data/raw/ai/
@@ -171,174 +174,51 @@ data/raw/ai/
 
 ---
 
-### 5. Audio Preprocessing
+### 🐳 5. Docker Support
 
-All audio is normalized into a consistent format before training or inference.
+The project includes Docker support for running the Gradio app in a container.
 
-The preprocessing utility is implemented in:
+Dockerfile location:
 
 ```text
-app/utils/audio.py
+docker/Dockerfile
 ```
 
-The audio pipeline does the following:
+---
 
-1. Loads audio from a file path or raw bytes
-2. Converts audio to mono
-3. Resamples to 16 kHz
-4. Normalizes amplitude
-5. Pads or trims the clip to a fixed duration
-6. Converts the waveform into a log-mel spectrogram
+## 🧠 How It Works
 
-Important constants and settings:
+### Audio Processing Pipeline
+
+Every audio clip goes through the same preprocessing pipeline:
+
+1. Load audio from file path or raw bytes
+2. Convert audio to mono
+3. Resample audio to 16 kHz
+4. Normalize amplitude
+5. Pad or trim clip to a fixed duration
+6. Convert waveform into a log-mel spectrogram
+7. Run the CNN classifier
+8. Generate prediction probabilities
+9. Generate Grad-CAM heatmap
+
+Important audio settings:
 
 ```python
 TARGET_SR = 16000
-clip duration = 3.0 seconds
-n_mels = 64
-n_fft = 1024
-hop_length = 256
-fmin = 20
-fmax = sr // 2
-```
-
-The classifier is trained on log-mel spectrograms rather than raw waveforms.
-
----
-
-## Repository Structure
-
-```text
-.
-├── README.md
-├── requirements.txt
-├── .env
-├── convert.py
-├── gen_clips.py
-├── app/
-│   ├── __init__.py
-│   ├── app.py
-│   ├── inference.py
-│   ├── train.py
-│   ├── elevenlabs_tools.py
-│   ├── models/
-│   │   ├── cnn_melspec.py
-│   │   └── weights/
-│   │       ├── cnn_melspec.pth
-│   │       └── cnn_melspec.last.pth
-│   └── utils/
-│       ├── audio.py
-│       ├── convert_mp3_to_wav.py
-│       └── gradcam.py
-├── data/
-│   └── raw/
-│       ├── ai/
-│       ├── ai_mp3/
-│       └── human/
-├── human/
-│   └── original AAC human recordings
-├── docker/
-│   └── Dockerfile
-└── notebooks/
-    └── 01_error_analysis.ipynb
+CLIP_DURATION = 3.0
+N_MELS = 64
+N_FFT = 1024
+HOP_LENGTH = 256
+FMIN = 20
+FMAX = sr // 2
 ```
 
 ---
 
-## Important Files
+## 🏗️ Model Architecture
 
-### `app/app.py`
-
-Main Gradio application.
-
-Responsibilities:
-
-- Loads environment variables
-- Loads the trained model checkpoint
-- Accepts microphone or uploaded audio from Gradio
-- Converts Gradio audio input into WAV bytes
-- Runs prediction using `Detector`
-- Runs Grad-CAM explanation
-- Displays prediction probabilities and heatmap
-- Provides an optional provenance check button
-
-Default model path:
-
-```text
-app/models/weights/cnn_melspec.pth
-```
-
-This can be overridden with:
-
-```text
-MODEL_WEIGHTS_PATH
-```
-
----
-
-### `app/inference.py`
-
-Inference wrapper around the trained CNN.
-
-Main class:
-
-```python
-Detector
-```
-
-Responsibilities:
-
-- Loads `TinyMelCNN`
-- Loads model weights if available
-- Converts audio into log-mel spectrogram features
-- Runs model inference
-- Applies softmax to get probabilities
-- Applies a configurable AI threshold
-- Optionally applies a fallback heuristic if no trained weights are present
-- Runs Grad-CAM explanations
-
-Environment-configurable inference settings:
-
-```text
-MODEL_WEIGHTS_PATH
-DETECTOR_ALLOW_HEURISTIC
-DETECTOR_AI_THRESHOLD
-DETECTOR_AI_BIAS
-```
-
-Default values:
-
-```text
-DETECTOR_ALLOW_HEURISTIC=0
-DETECTOR_AI_THRESHOLD=0.50
-DETECTOR_AI_BIAS=0.00
-```
-
-The detector returns:
-
-```json
-{
-  "human": 0.0,
-  "ai": 1.0,
-  "label": "ai",
-  "threshold": 0.5,
-  "trained": true
-}
-```
-
----
-
-### `app/models/cnn_melspec.py`
-
-Defines the CNN model used for classification.
-
-Main model:
-
-```python
-TinyMelCNN
-```
-
-Architecture:
+The project uses a compact CNN model called `TinyMelCNN`.
 
 ```text
 Input: 1 x n_mels x time
@@ -372,35 +252,168 @@ Output classes:
 1 = ai
 ```
 
-The model checkpoint contains approximately 548k parameters.
+The model checkpoint contains approximately **548k parameters**, making it lightweight enough for fast inference.
 
 ---
 
-### `app/train.py`
-
-Training pipeline for the detector.
-
-Main responsibilities:
-
-- Loads data from a folder with `human/` and `ai/` subfolders
-- Splits data into train and validation sets
-- Applies class-specific audio augmentation
-- Converts audio into log-mel spectrograms
-- Trains `TinyMelCNN`
-- Uses class-weighted cross entropy to handle imbalance
-- Supports GPU training when CUDA is available
-- Supports automatic mixed precision
-- Saves best and latest model checkpoints
-
-Expected training data format:
+## 📂 Repository Structure
 
 ```text
-data/raw/
+.
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── LICENSE
+├── convert.py
+├── gen_clips.py
+│
+├── app/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── inference.py
+│   ├── train.py
+│   ├── elevenlabs_tools.py
+│   │
+│   ├── models/
+│   │   ├── cnn_melspec.py
+│   │   └── weights/
+│   │       ├── cnn_melspec.pth
+│   │       └── cnn_melspec.last.pth
+│   │
+│   └── utils/
+│       ├── audio.py
+│       ├── convert_mp3_to_wav.py
+│       └── gradcam.py
+│
+├── data/
+│   └── raw/
+│       ├── ai/
+│       ├── ai_mp3/
+│       └── human/
+│
 ├── human/
-│   └── *.wav
-└── ai/
-    └── *.wav
+│   └── original AAC human recordings
+│
+├── docker/
+│   └── Dockerfile
+│
+└── notebooks/
+    └── 01_error_analysis.ipynb
 ```
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Hritik827/Voice-Guard-Human-vs-AI-Speech.git
+cd Voice-Guard-Human-vs-AI-Speech
+```
+
+---
+
+### 2. Create a Virtual Environment
+
+#### Windows PowerShell
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\activate
+```
+
+#### Windows Git Bash
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate
+```
+
+#### macOS / Linux
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+---
+
+### 3. Upgrade pip
+
+```bash
+python -m pip install --upgrade pip
+```
+
+---
+
+### 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the project root only if you want to use ElevenLabs generation or customize inference settings.
+
+Example:
+
+```env
+ELEVEN_API_KEY=your_elevenlabs_api_key_here
+ELEVEN_VOICE_ID=your_default_voice_id_here
+
+MODEL_WEIGHTS_PATH=app/models/weights/cnn_melspec.pth
+DETECTOR_AI_THRESHOLD=0.50
+DETECTOR_AI_BIAS=0.00
+DETECTOR_ALLOW_HEURISTIC=0
+```
+
+> **Important:** Do not commit `.env` to GitHub.
+
+Recommended `.gitignore` entries:
+
+```gitignore
+.env
+*.env
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+```
+
+---
+
+## ▶️ Run the App Locally
+
+From the project root, run:
+
+```bash
+python app/app.py
+```
+
+Or:
+
+```bash
+python -m app.app
+```
+
+After running the command, open the local Gradio URL shown in the terminal.
+
+Usually it looks like:
+
+```text
+http://127.0.0.1:7860
+```
+
+---
+
+## 🧪 Train the Model
 
 Default training command:
 
@@ -408,7 +421,7 @@ Default training command:
 python -m app.train --data_dir data/raw --out app/models/weights/cnn_melspec.pth
 ```
 
-Useful options:
+More complete training command:
 
 ```bash
 python -m app.train \
@@ -419,10 +432,42 @@ python -m app.train \
   --grad_accum 2 \
   --lr 1e-3 \
   --val_ratio 0.15 \
-  --clip_seconds 3.0
+  --clip_seconds 3.0 \
+  --seed 42
 ```
 
-The script saves:
+For CPU-only training:
+
+```bash
+python -m app.train --data_dir data/raw --cpu
+```
+
+For Windows multiprocessing issues, use:
+
+```bash
+python -m app.train --data_dir data/raw --workers 0
+```
+
+---
+
+## 📊 Training Pipeline
+
+The training script performs the following steps:
+
+1. Reads audio files from `data/raw/human` and `data/raw/ai`
+2. Assigns labels:
+   - `0 = human`
+   - `1 = ai`
+3. Shuffles the dataset
+4. Splits data into training and validation sets
+5. Pads or trims each clip to 3 seconds
+6. Applies audio augmentation
+7. Converts audio into log-mel spectrograms
+8. Trains `TinyMelCNN`
+9. Saves the latest checkpoint after each epoch
+10. Saves the best checkpoint based on validation performance
+
+Saved model files:
 
 ```text
 app/models/weights/cnn_melspec.pth
@@ -431,212 +476,31 @@ app/models/weights/cnn_melspec.last.pth
 
 ---
 
-### `app/utils/audio.py`
+## 🎚️ Audio Augmentation
 
-Audio loading and feature extraction utilities.
+Human clips receive mild natural perturbations:
 
-Main functions:
+- Gaussian noise
+- Small time stretch
+- Small pitch shift
+- Gain adjustment
 
-```python
-load_audio()
-pad_or_trim()
-logmel()
-heuristic_features()
-```
+AI clips receive replay-aware augmentation:
 
-The `heuristic_features()` function extracts lightweight audio features such as:
+- Band-pass filtering
+- Gaussian noise
+- Time stretch
+- Gain adjustment
+- Optional clipping distortion
+- Optional MP3 compression when supported
 
-- Zero crossing rate
-- Spectral centroid
-- Spectral flatness
-- Spectral rolloff
-- RMS energy
-- MFCCs
-
-These heuristic features are only used if heuristic fallback is explicitly enabled.
+These augmentations help the model become more robust to real-world recording conditions such as microphone noise, speaker playback, compression, and replay artifacts.
 
 ---
 
-### `app/utils/gradcam.py`
+## 🗂️ Dataset
 
-Implements Grad-CAM for the spectrogram CNN.
-
-Main class:
-
-```python
-SpectrogramGradCAM
-```
-
-The target layer used by default is:
-
-```text
-features.6
-```
-
-This corresponds to the third convolutional layer in `TinyMelCNN`.
-
-The Grad-CAM process:
-
-1. Runs a forward pass
-2. Selects the predicted class score
-3. Backpropagates from that score
-4. Averages gradients spatially
-5. Weights feature maps by those gradients
-6. Applies ReLU
-7. Normalizes the heatmap to `[0, 1]`
-
-The output is returned as a NumPy array and displayed in the Gradio app.
-
----
-
-### `app/elevenlabs_tools.py`
-
-Contains ElevenLabs helper functions.
-
-Main functions:
-
-```python
-generate_tts_dataset()
-check_ai_speech()
-```
-
-`generate_tts_dataset()` calls the ElevenLabs text-to-speech API and saves MP3 files.
-
-The default ElevenLabs model ID is:
-
-```text
-eleven_monolingual_v1
-```
-
-`check_ai_speech()` is currently a stub. It returns:
-
-```json
-{
-  "supported": false,
-  "prob_ai": null,
-  "provider": "elevenlabs",
-  "note": "Classifier not enabled in this template."
-}
-```
-
-So the provenance button exists in the UI, but the current implementation does not perform a real external provenance check.
-
----
-
-### `app/utils/convert_mp3_to_wav.py`
-
-Utility script for converting MP3 files to 16 kHz mono WAV files.
-
-Example:
-
-```bash
-python -m app.utils.convert_mp3_to_wav --src data/raw/ai_mp3 --dst data/raw/ai
-```
-
-The conversion uses:
-
-- `librosa` for loading and resampling
-- `soundfile` for writing WAV files
-
----
-
-### `gen_clips.py`
-
-AI speech dataset generation script.
-
-Responsibilities:
-
-- Loads `ELEVEN_API_KEY` from `.env`
-- Uses 10 ElevenLabs voices
-- Generates 200 AI speech clips
-- Saves MP3 files to `data/raw/ai_mp3`
-- Converts MP3 files to 16 kHz mono WAV files in `data/raw/ai`
-
-Run:
-
-```bash
-python gen_clips.py
-```
-
-Required environment variable:
-
-```text
-ELEVEN_API_KEY
-```
-
----
-
-### `convert.py`
-
-Utility for flattening and renaming files.
-
-It recursively walks through a source folder, copies files into one output folder, and renames them using the pattern:
-
-```text
-elab_0001.ext
-elab_0002.ext
-...
-```
-
-Current hardcoded paths:
-
-```python
-root_folder = "data/raw/ai_mp3"
-output_folder = "data/raw/ai"
-```
-
-Use this carefully because it copies files as-is and does not perform audio format conversion.
-
-For MP3-to-WAV conversion, prefer:
-
-```text
-app/utils/convert_mp3_to_wav.py
-```
-
----
-
-### `docker/Dockerfile`
-
-Docker configuration for running the Gradio app.
-
-Current Dockerfile:
-
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app ./app
-COPY .env ./
-EXPOSE 7860
-CMD ["python", "app/app.py"]
-```
-
-Build:
-
-```bash
-docker build -f docker/Dockerfile -t ai-voice-detector .
-```
-
-Run:
-
-```bash
-docker run -p 7860:7860 ai-voice-detector
-```
-
-Security note: the current Dockerfile copies `.env` into the image. That is acceptable only for local experimentation. For public repositories or shared images, do not copy `.env` into the image. Use runtime environment variables or `--env-file` instead.
-
----
-
-### `notebooks/01_error_analysis.ipynb`
-
-Placeholder notebook for future error analysis. In the current ZIP, this notebook does not contain analysis cells yet.
-
----
-
-## Dataset Included in This Repository
-
-The ZIP contains local audio data.
+The repository includes a small local dataset.
 
 ### AI Speech Data
 
@@ -656,8 +520,6 @@ Format:
 16 kHz mono WAV
 ```
 
-These are generated AI speech clips.
-
 ---
 
 ### AI MP3 Source Data
@@ -672,7 +534,7 @@ Contains:
 200 MP3 files
 ```
 
-These are the original ElevenLabs-generated MP3 files before conversion to WAV.
+These are the original ElevenLabs-generated MP3 files before WAV conversion.
 
 ---
 
@@ -694,8 +556,6 @@ Format:
 16 kHz mono WAV
 ```
 
-These are human speech samples used for training and validation.
-
 ---
 
 ### Original Human Recordings
@@ -710,11 +570,11 @@ Contains:
 50 AAC files
 ```
 
-These appear to be original human recordings before conversion into the training-ready WAV format.
+These are original human recordings before conversion into training-ready WAV format.
 
 ---
 
-## Dataset Balance
+## ⚖️ Dataset Balance
 
 The current dataset is imbalanced:
 
@@ -723,245 +583,13 @@ AI clips:    200
 Human clips: 50
 ```
 
-The training code compensates for this imbalance using class-weighted cross entropy.
+The training code uses class-weighted cross entropy to reduce the effect of imbalance.
 
-Still, because the dataset is small and skewed, the model should be treated as a prototype rather than a robust real-world detector.
-
----
-
-## Technologies Used
-
-### Machine Learning and Deep Learning
-
-- Python
-- PyTorch
-- TorchAudio
-- NumPy
-- SciPy
-- librosa
-- soundfile
-- audiomentations
-
-### Audio Processing
-
-- 16 kHz mono audio normalization
-- Log-mel spectrogram extraction
-- MP3-to-WAV conversion
-- Audio augmentation
-- Spectral feature extraction
-- MFCC-based heuristic features
-
-### Model Explainability
-
-- Grad-CAM
-- Spectrogram heatmap visualization
-- Matplotlib colormaps
-
-### Web App
-
-- Gradio
-
-### API and Environment Utilities
-
-- requests
-- python-dotenv
-- pydantic
-- FastAPI
-- Uvicorn
-
-Note: FastAPI and Uvicorn are listed in `requirements.txt`, but the current active app is Gradio-based. There is no active FastAPI server implementation in the current source files.
-
-### Data Generation
-
-- ElevenLabs text-to-speech API
-
-### Containerization
-
-- Docker
-- Python 3.11 slim image
-
-### Development Tools
-
-- Black formatter
-- Jupyter Notebook placeholder
+However, because the dataset is small and skewed, this project should be treated as a prototype and not as a production-grade detector.
 
 ---
 
-## Installation
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/ai-voice-detector.git
-cd ai-voice-detector
-```
-
----
-
-### 2. Create a Virtual Environment
-
-On Windows Git Bash:
-
-```bash
-python -m venv .venv
-source .venv/Scripts/activate
-```
-
-On macOS/Linux:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
-
----
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Environment Variables
-
-Create a local `.env` file if you want to use ElevenLabs generation.
-
-Example:
-
-```text
-ELEVEN_API_KEY=your_elevenlabs_api_key_here
-ELEVEN_VOICE_ID=your_default_voice_id_here
-MODEL_WEIGHTS_PATH=app/models/weights/cnn_melspec.pth
-DETECTOR_AI_THRESHOLD=0.50
-DETECTOR_AI_BIAS=0.00
-DETECTOR_ALLOW_HEURISTIC=0
-```
-
-Do not commit `.env` to GitHub.
-
-Recommended `.gitignore` entries:
-
-```gitignore
-.env
-*.env
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-.ipynb_checkpoints/
-.DS_Store
-Thumbs.db
-```
-
----
-
-## Running the App
-
-From the repository root:
-
-```bash
-python app/app.py
-```
-
-Or:
-
-```bash
-python -m app.app
-```
-
-Then open the local Gradio URL shown in the terminal.
-
-The app allows you to:
-
-1. Upload or record audio
-2. Click **Analyze**
-3. View probabilities and predicted label
-4. View Grad-CAM heatmap
-5. Optionally click **Provenance Check**
-
----
-
-## Training the Model
-
-To train the CNN from scratch:
-
-```bash
-python -m app.train --data_dir data/raw --out app/models/weights/cnn_melspec.pth
-```
-
-More complete example:
-
-```bash
-python -m app.train \
-  --data_dir data/raw \
-  --out app/models/weights/cnn_melspec.pth \
-  --epochs 10 \
-  --batch_size 32 \
-  --grad_accum 2 \
-  --lr 1e-3 \
-  --val_ratio 0.15 \
-  --clip_seconds 3.0 \
-  --seed 42
-```
-
-Use CPU explicitly:
-
-```bash
-python -m app.train --data_dir data/raw --cpu
-```
-
-Use zero workers on Windows if multiprocessing causes issues:
-
-```bash
-python -m app.train --data_dir data/raw --workers 0
-```
-
----
-
-## Training Pipeline Details
-
-The training process:
-
-1. Reads files from `data/raw/human` and `data/raw/ai`
-2. Assigns labels:
-   - `0 = human`
-   - `1 = ai`
-3. Randomly shuffles the dataset
-4. Splits into training and validation sets
-5. Pads or trims each clip to 3 seconds
-6. Applies augmentation during training
-7. Converts audio to log-mel spectrogram
-8. Trains the CNN using cross entropy loss
-9. Saves the latest checkpoint every epoch
-10. Saves the best checkpoint when validation accuracy improves
-
----
-
-## Audio Augmentation
-
-Human clips receive mild natural perturbations:
-
-- Gaussian noise
-- Small time stretch
-- Small pitch shift
-- Gain adjustment
-
-AI clips receive replay-aware augmentation:
-
-- Band-pass filtering
-- Gaussian noise
-- Time stretch
-- Gain adjustment
-- Optional clipping distortion
-- Optional MP3 compression when supported
-
-This is intended to make the detector more robust to microphone, speaker, compression, and replay artifacts.
-
----
-
-## Generating AI Voice Data
+## 🤖 Generate AI Voice Data
 
 To generate AI speech clips with ElevenLabs:
 
@@ -975,116 +603,201 @@ python gen_clips.py
 The script will:
 
 1. Generate MP3 clips using ElevenLabs
-2. Save them under `data/raw/ai_mp3`
-3. Convert them to 16 kHz mono WAV files under `data/raw/ai`
+2. Save them to `data/raw/ai_mp3`
+3. Convert them to 16 kHz mono WAV files in `data/raw/ai`
 
 ---
 
-## Converting MP3 Files to WAV
+## 🔄 Convert MP3 to WAV
 
-Use:
+Use this command to convert MP3 files into 16 kHz mono WAV files:
 
 ```bash
 python -m app.utils.convert_mp3_to_wav --src data/raw/ai_mp3 --dst data/raw/ai
 ```
 
-This converts all MP3 files in the source folder to 16 kHz mono WAV files.
+This conversion uses:
+
+- `librosa`
+- `soundfile`
 
 ---
 
-## Model Output
+## 🐳 Run with Docker
 
-The model returns two probabilities:
+### Build the Docker Image
 
-```text
-human
-ai
+```bash
+docker build -f docker/Dockerfile -t voice-guard .
 ```
 
-It also returns a final label based on the AI threshold.
+### Run the Container
 
-Example:
+```bash
+docker run -p 7860:7860 voice-guard
+```
+
+Then open:
+
+```text
+http://localhost:7860
+```
+
+### Run with Environment Variables
+
+For local testing with a `.env` file:
+
+```bash
+docker run --env-file .env -p 7860:7860 voice-guard
+```
+
+> Security note: avoid copying `.env` into Docker images for public repositories or shared images. Use runtime environment variables instead.
+
+---
+
+## 🧩 Important Files
+
+| File | Purpose |
+|---|---|
+| `app/app.py` | Main Gradio web app |
+| `app/inference.py` | Model loading, inference, probability output, Grad-CAM call |
+| `app/train.py` | Training pipeline |
+| `app/models/cnn_melspec.py` | TinyMelCNN model architecture |
+| `app/utils/audio.py` | Audio loading, preprocessing, log-mel feature extraction |
+| `app/utils/gradcam.py` | Spectrogram Grad-CAM explainability |
+| `app/utils/convert_mp3_to_wav.py` | MP3-to-WAV converter |
+| `app/elevenlabs_tools.py` | ElevenLabs helper functions |
+| `gen_clips.py` | AI speech generation script |
+| `convert.py` | File flattening and renaming utility |
+| `docker/Dockerfile` | Docker container setup |
+| `notebooks/01_error_analysis.ipynb` | Placeholder for future error analysis |
+
+---
+
+## 🧾 Example Prediction Output
 
 ```json
 {
-  "human": 0.184,
-  "ai": 0.816,
+  "human": 0.23,
+  "ai": 0.77,
   "label": "ai",
   "threshold": 0.5,
   "trained": true
 }
 ```
 
+Meaning:
+
+| Field | Description |
+|---|---|
+| `human` | Probability that the clip is human speech |
+| `ai` | Probability that the clip is AI-generated speech |
+| `label` | Final predicted class |
+| `threshold` | AI decision threshold |
+| `trained` | Whether trained model weights were loaded |
+
 ---
 
-## Explainability Output
+## 🛠️ Technologies Used
 
-The explanation heatmap is generated from the model's convolutional feature maps.
+### Machine Learning
 
-The heatmap shows which spectrogram regions had the greatest influence on the predicted class.
+- Python
+- PyTorch
+- TorchAudio
+- NumPy
+- SciPy
+- librosa
+- soundfile
+- audiomentations
 
-Bright/high-activation regions indicate time-frequency areas that contributed more strongly to the model's decision.
+### Model Explainability
+
+- Grad-CAM
+- Spectrogram heatmaps
+- Matplotlib visualization
+
+### Web App
+
+- Gradio
+
+### API and Environment Tools
+
+- requests
+- python-dotenv
+- pydantic
+
+### Data Generation
+
+- ElevenLabs text-to-speech API
+
+### Containerization
+
+- Docker
+- Python 3.11 slim image
+
+### Development
+
+- Jupyter Notebook
+- Black formatter
 
 ---
 
-## Known Limitations
+## ⚠️ Known Limitations
 
-This project is a prototype and has several important limitations:
+This project is a working prototype, but it has important limitations:
 
 1. The dataset is small.
-2. The dataset is imbalanced, with more AI clips than human clips.
-3. AI clips are generated from ElevenLabs, so the model may overfit to ElevenLabs-style speech.
-4. The model may not generalize well to other TTS providers.
-5. Real-world audio conditions are more varied than the current dataset.
-6. The provenance check button currently calls a stub, not a real external detector.
-7. The notebook for error analysis is currently empty.
-8. The current Dockerfile copies `.env`, which should be changed before public deployment.
-9. No formal benchmark metrics are included in the repository.
-10. The model should not be used for high-stakes decisions without more data, calibration, testing, and validation.
+2. The dataset is imbalanced.
+3. AI clips are generated mainly from ElevenLabs.
+4. The model may overfit to ElevenLabs-style speech.
+5. It may not generalize well to other TTS providers.
+6. Real-world recordings include more noise, microphones, accents, and compression artifacts.
+7. The provenance check button currently calls a stub, not a real external detector.
+8. Formal benchmark metrics are not yet included.
+9. The error analysis notebook is currently a placeholder.
+10. The model should not be used for high-stakes decisions without stronger validation.
 
 ---
 
-## Recommended Future Improvements
+## 🔮 Future Improvements
 
-Useful next steps:
+Planned or recommended improvements:
 
-1. Add more human voices across genders, accents, microphones, rooms, and recording devices.
-2. Add AI speech from multiple providers, not only ElevenLabs.
-3. Add train/validation/test split with a held-out speaker/provider split.
-4. Track metrics such as accuracy, precision, recall, F1, ROC-AUC, and equal error rate.
-5. Add a confusion matrix and error analysis notebook.
-6. Calibrate model probabilities.
-7. Add support for longer clips using sliding windows.
-8. Add a FastAPI inference endpoint.
-9. Replace `.env` copying in Docker with runtime environment variables.
-10. Add model versioning and dataset versioning.
-11. Use Git LFS for model weights and large audio files if the repository grows.
-12. Add CI checks for formatting, linting, and basic inference tests.
+- Add more human voices across genders, accents, rooms, devices, and microphones
+- Add AI speech from multiple TTS providers
+- Add a held-out speaker/provider test split
+- Add formal metrics: accuracy, precision, recall, F1, ROC-AUC, EER
+- Add confusion matrix and error analysis notebook
+- Calibrate model probabilities
+- Add support for longer clips using sliding windows
+- Add a FastAPI inference endpoint
+- Add automated tests for preprocessing and inference
+- Add CI checks for formatting and linting
+- Use Git LFS for large model weights and audio files
+- Add model versioning and dataset versioning
 
 ---
 
-## Security Notes
+## 🔒 Security Notes
 
 Do not commit secrets to GitHub.
 
-The following file should stay local:
+The following file should remain local:
 
 ```text
 .env
 ```
 
-The `.env` file may contain:
+If an API key is accidentally pushed to GitHub:
 
-```text
-ELEVEN_API_KEY
-ELEVEN_VOICE_ID
-```
-
-If these credentials were accidentally pushed to GitHub, revoke and regenerate the API key.
+1. Revoke the key immediately
+2. Generate a new key
+3. Remove the old key from Git history if needed
 
 ---
 
-## Suggested GitHub Description
+## 📝 Suggested GitHub Repository Description
 
 ```text
 Explainable AI voice detector that classifies short speech clips as human or AI-generated using log-mel spectrograms, a PyTorch CNN, Grad-CAM heatmaps, and a Gradio demo.
@@ -1092,7 +805,7 @@ Explainable AI voice detector that classifies short speech clips as human or AI-
 
 ---
 
-## Suggested Topics
+## 🏷️ Suggested GitHub Topics
 
 ```text
 ai-voice-detection
@@ -1105,16 +818,20 @@ audio-classification
 mel-spectrogram
 elevenlabs
 machine-learning
+docker
+explainable-ai
 ```
 
 ---
 
-## License
+## 📜 License
 
-Add the license used by this repository here.
+This project includes a `LICENSE` file. Please check the license file for usage terms.
 
-If this repository was initialized with an MIT License on GitHub, keep the existing `LICENSE` file and use:
+---
 
-```text
-MIT License
-```
+## 🙌 Acknowledgements
+
+This project was developed as a practical prototype for AI-generated speech detection using modern audio processing, deep learning, and explainable AI techniques.
+
+Special thanks to all team members for contributions to data generation, model development, app integration, and testing.
